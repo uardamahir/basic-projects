@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Age Calculator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  
+  <div class="main">
+  <p id="head">JavaScript <br>
+  <span class="head-text">Age Calculator</span>
+  </p>
+
+  <div class="item">
+  <input type="text" id="year" placeholder="31-05-1999">
+  <button id="btn">Calculate</button>
+  </div>
+
+  <p class="result-text">Your age will be displayed here.
+  </p>
+  </div>
+  
+  <script>
+    let input = document.getElementById("year");
+    let button = document.getElementById("btn");
+    let result = document.querySelector(".result-text");
+
+button.addEventListener('click', () => {
+  const value = input.value;
+  if (!value) return alert("Lütfen doğum tarihinizi giriniz!");
+
+  const parts = value.split("-");
+  if (parts.length !== 3) return alert("Lütfen tarihi GG-AA-YYYY formatında giriniz!");
+
+  let [day, month, year] = parts.map(Number);
+
+  const birthDate = new Date(year, month - 1, day);
+  const today = new Date();
+
+  if (birthDate > today) return alert("Doğum tarihi bugünden sonra olamaz!");
+
+  let ageYears = today.getFullYear() - birthDate.getFullYear();
+  let ageMonths = today.getMonth() - birthDate.getMonth();
+  let ageDays = today.getDate() - birthDate.getDate();
+
+  if (ageDays < 0) {
+    ageMonths--;
+    let prevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+    ageDays += prevMonth.getDate();
+  }
+
+  if (ageMonths < 0) {
+    ageYears--;
+    ageMonths += 12;
+  }
+
+  result.textContent = `You are ${ageYears} years, ${ageMonths} months and ${ageDays} days old`;
+});
+    
+  </script>
+</body>
+</html>
