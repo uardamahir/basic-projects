@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Button Count</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="container">
+    <div id="counter">0</div>
+
+    <button id="btn" class="btn">
+      Sayaç
+    <span class="popup-text">Burak!</span>
+    </button>
+
+    <audio id="popSound" src="pop.wav" preload="auto"></audio>
+  </div>
+
+  <script>
+    const button = document.getElementById("btn");
+    const popSound = document.getElementById("popSound");
+    const counter = document.getElementById("counter");
+
+    let count = 0;
+    let bubbleInterval;
+    let holdActive = false;
+
+    button.addEventListener("mousedown", () => {
+     holdActive = true;
+     bubbleInterval = setInterval(() => {
+     createBubble();
+  }, 150);
+});
+
+  
+    ["mouseup", "mouseleave"].forEach(event => {
+      button.addEventListener(event, () => {
+        clearInterval(bubbleInterval);
+        holdActive = false;
+      });
+    });
+
+    
+    button.addEventListener("click", () => {
+      if (!holdActive) {
+        createBubble();
+      }
+    });
+
+    function createBubble() {
+      incrementCounter();
+
+      const bubble = document.createElement("span");
+      bubble.className = "popup-text";
+      bubble.textContent = "Burak!";
+
+      const offsetX = Math.random() * 30 - 15;
+      bubble.style.right = `0%`;
+      bubble.style.top = `0%`;
+      bubble.style.transform = `translate(${50 + offsetX}%, -50%) scale(0.5)`;
+
+      bubble.style.backgroundColor = getRandomColor();
+      bubble.style.color = "white";
+      bubble.style.boxShadow = `0 0 20px ${bubble.style.backgroundColor}`;
+
+      button.appendChild(bubble);
+
+      popSound.currentTime = 0;
+      popSound.play();
+
+      setTimeout(() => {
+        bubble.classList.add("show");
+      }, 10);
+
+      setTimeout(() => {
+        bubble.remove();
+      }, 1500);
+    }
+
+    function getRandomColor() {
+      const colors = [
+        "#ff4b5c", "#3ae374", "#17c0eb", "#ffaf40",
+        "#c56cf0", "#feca57", "#1dd1a1", "#ff6b81", "#2e86de"
+      ];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    function incrementCounter() {
+      count++;
+      counter.textContent = count;
+
+      counter.classList.add("bump");
+      setTimeout(() => {
+        counter.classList.remove("bump");
+      }, 200);
+    }
+  </script>
+</body>
+</html>
